@@ -136,6 +136,31 @@ for i = 1 : patch_size : w
             
         end
         
+        %% inja corner e satr akhar sotoon akhar :
+        if i == 1 && j == h - patch_size + 1
+            disp('salam');
+            error = [];
+            %% inja right corner barash darmiarim :
+            %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
+            for k = 1 : 36
+                element = cell2mat(my_array(k, 1));
+                disp(k);
+                right_gradient = element(:,patch_size);
+                MSE = mse(right_gradient, left_corner_5_8);
+                error = [error MSE];
+            end
+            
+            minimum = min(error);
+            min_error = find(error == minimum);
+            
+            %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
+            new_picture = cell2mat(my_array(min_error, 3));
+            output_image(h - patch_size + 1: h, w - (2 * patch_size) + 1 : w - patch_size , :) = new_picture;
+            figure(1);
+            imshow(output_image, []);
+            
+        end
+        
     end
     
 end
