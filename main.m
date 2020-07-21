@@ -62,13 +62,12 @@ top_corner_5_8 = GV(1,:);
 for i = 1 : patch_size : w
     for j = 1 : patch_size : h
         
-        %% corner e aval :
+        %% inja corner e satr aval sotoon aval :
         if i == 1 && j == 1
             error = [];
             %% inja right corner barash darmiarim :
             %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
             for k = 1 : 36
-                
                 element = cell2mat(my_array(k, 1));
                 disp(k);
                 left_gradient = element(:, 1);
@@ -78,21 +77,42 @@ for i = 1 : patch_size : w
             
             minimum = min(error);
             min_error = find(error == minimum);
-            disp(min_error);
             
             %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
             new_picture = cell2mat(my_array(min_error, 3));
-            
-            disp(size(new_picture));
-            
-            
             output_image(1:patch_size, patch_size + 1: 2 * patch_size, :) = new_picture;
+            %figure(1);
+            %imshow(output_image, []);
+            
+        end
+        
+        %% inja corner e satr aval sotoon akhar :
+        if i == w - patch_size + 1 && j == 1
+            disp('salam');
+            error = [];
+            %% inja right corner barash darmiarim :
+            %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
+            for k = 1 : 36
+                element = cell2mat(my_array(k, 1));
+                disp(k);
+                right_gradient = element(:, patch_size);
+                MSE = mse(right_gradient, left_corner_1_8);
+                error = [error MSE];
+            end
+            
+            minimum = min(error);
+            min_error = find(error == minimum);
+            
+            %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
+            new_picture = cell2mat(my_array(min_error, 3));
+            output_image(1:patch_size, w - 2 * patch_size + 1: w - patch_size, :) = new_picture;
             figure(1);
             imshow(output_image, []);
             
         end
         
     end
+    
 end
 
 
