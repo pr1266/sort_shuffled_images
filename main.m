@@ -1,3 +1,5 @@
+clear;
+close all;
 %% read data :
 data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\';
 data_dir = dir(data_path);
@@ -11,8 +13,10 @@ w = 1920;
 %% bar asas e size e tasvir size har patch ro bedast miarim :
 patch_size = sqrt((h * w) / 40);
 
+%% horizontal sobel filter
+sobel_filter = [-1, -2, -1; 0, 0, 0; 1, 2, 1];
 %% ye array dorost mikonim ta etelaat e patch haro zakhire konim :
-my_array = cell(numel(data_dir) - 9, 4);
+my_array = cell(numel(data_dir) - 9, 5);
 
 %% etelaat ro be array montaghel mikonim :
 
@@ -31,39 +35,15 @@ for image = 9 : numel(data_dir) - 1
     my_array(image - 8, 3) = mat2cell(picture, patch_size, patch_size, 3);
     my_array(image - 8, 4) = cellstr(data_dir(image).name);
     
+    filtered_picture = imfilter(picture, sobel_filter);
+    my_array(image - 8, 5) = mat2cell(filtered_picture, patch_size, patch_size, 3);
+    
 end
-
-%% inja etelaat e corner haro darmiarim :
-
-%% corner e 1 :
-corner_1_1 = rgb2gray(imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Corner_1_1.tif'));
-[GV, GD] = imgradient(corner_1_1);
-right_corner_1_1 = GV(:,patch_size);
-bottom_corner_1_1 = GV(patch_size, :);
-
-%% corner e 2 :
-corner_1_8 = rgb2gray(imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Corner_1_8.tif'));
-[GV, GD] = imgradient(corner_1_8);
-left_corner_1_8 = GV(:,1);
-bottom_corner_1_8 = GV(patch_size,:);
-
-%% corner e 3 :
-corner_5_1 = rgb2gray(imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Corner_5_1.tif'));
-[GV, GD] = imgradient(corner_5_1);
-right_corner_5_1 = GV(:,patch_size);
-top_corner_5_1 = GV(1,:);
-
-%% corner e 4 :
-corner_5_8 = rgb2gray(imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Corner_5_8.tif'));
-[GV, GD] = imgradient(corner_5_8);
-left_corner_5_8 = GV(:,1);
-top_corner_5_8 = GV(1,:);
-
 
 %% inja mikham tasvir ro por konam :
 
-figure(1);
-imshow(output_image, []);
+%figure(1);
+%imshow(output_image, []);
 
 
 for i = 1 : patch_size : h
@@ -83,54 +63,86 @@ for i = 1 : patch_size : h
             %% inja az balaiish migire yani output_image(1 : patch_size, j : j + patch_size_1);
             %% vaghti az balaiish migirim, pas bottom e temp va top e new_picture ro mikhaim :
             if(j == 1)
-                temp_picture = output_image(i - patch_size : i - 1, j : j + patch_size - 1, :);
-                temp_picture = rgb2gray(temp_picture);
+                temp_picture_ = output_image(i - patch_size : i - 1, j : j + patch_size - 1, :);
+                temp_picture = rgb2gray(temp_picture_);
                 %% inja gradient esho dar miarim :
                 [GV, GD] = imgradient(temp_picture);
                 bottom_gradient = GV(patch_size,:);
+                
+                %% sobel filter :
+                %% paiinesh ro estekhraj mikonim :
+                filtered_image = imfilter(temp_picture_, sobel_filter);
+                filtered_image = filtered_image(patch_size,:);
                 %% hala inja biaim element e mored e nazar ro dar biarim :
                 error = [];
+                edge_error = [];
                 for k = 1 : size(my_array);
-                
+                    
+                    %% inja baraye gradient :
+                    
                     element = cell2mat(my_array(k, 1));
                     top_gradient = element(1,:);
                     MSE = mse(bottom_gradient, top_gradient);
                     error = [error MSE];
+                    
+                    %% inja baraye sobel :
+                    %% balasho estekhraj mikonim :
+                    sobel_element = cell2mat(my_array(k, 5));
+                    sobel_element = sobel_element(1,:);
+                    MSE = mse(sobel_element, filtered_image);
+                    edge_error = [edge_error MSE];
+                    
                 end
                 
-                minimum = min(error);
-                min_error = find(error == minimum);
+                minimum = min(edge_error);
+                min_error = find(edge_error == minimum);
              
              %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
              new_picture = cell2mat(my_array(min_error, 3));
              output_image(i : i + patch_size - 1, j : j + patch_size - 1, :) = new_picture;
              %pause(1);
-             figure(1);
-             imshow(output_image, []);
-             %my_array(min_error, :) = [];
+             %figure(1);
+             %imshow(output_image, []);
+             my_array(min_error, :) = [];
              
             %% toye else az samt e chapish estefade mikonim :
             else
                 
-                temp_picture = output_image(i : i + patch_size - 1, j - patch_size : j - 1, :);
-                temp_picture = rgb2gray(temp_picture);
-                figure;
-                imshow(temp_picture, []);
+                temp_picture_ = output_image(i : i + patch_size - 1, j - patch_size : j - 1, :);
+                temp_picture = rgb2gray(temp_picture_);
+                %figure;
+                %imshow(temp_picture, []);
                 %% gradient :
                 [GV, GD] = imgradient(temp_picture);
                 right_gradient = GV(:,patch_size);
                 
+                %% soble filter :
+                filtered_image = imfilter(temp_picture_, sobel_filter);
+                %% samt e rastesh ro estekhraj mikonim :
+                filtered_image = filtered_image(:,patch_size);
                 %% hala inja biaim element e mored e nazar ro dar biarim :
                 error = [];
+                edge_error = [];
                 for k = 1 : size(my_array);
+                    
                     element = cell2mat(my_array(k, 1));
                     left_gradient = element(:,1);
                     MSE = mse(left_gradient, right_gradient);
                     error = [error MSE];
+                    
+                    %% inja baraye sobel :
+                    sobel_element = cell2mat(my_array(k, 5));
+                    %% samt e rast e tasvir ghabl va samt chap tasvir jadid :
+                    sobel_element = cell2mat(my_array(k, 5));
+                    sobel_element = sobel_element(:,1);
+                    %% hala error :
+                    MSE = mse(sobel_element, filtered_image);
+                    edge_error = [edge_error MSE];
+                    
                 end
                 
-                minimum = min(error);
-                min_error = find(error == minimum);
+                minimum = min(edge_error);
+                min_error = find(edge_error == minimum);
              
                  %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
                  new_picture = cell2mat(my_array(min_error, 3));
@@ -138,7 +150,7 @@ for i = 1 : patch_size : h
                  %pause(1);
                  figure(1);
                  imshow(output_image, []);
-                 %my_array(min_error, :) = [];
+                 my_array(min_error, :) = [];
             end
         end
     
