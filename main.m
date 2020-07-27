@@ -62,145 +62,6 @@ top_corner_5_8 = GV(1,:);
 
 %% inja mikham tasvir ro por konam :
 
-% for i = 1 : patch_size : w
-%     for j = 1 : patch_size : h
-%         disp(i);
-%         disp(j);
-%         %% inja corner e satr aval sotoon aval :
-%         if i == 1 && j == 1
-%             error = [];
-%             %% inja right corner barash darmiarim :
-%             %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
-%             for k = 1 : size(my_array);
-%                 
-%                 element = cell2mat(my_array(k, 1));
-%                 left_gradient = element(:, 1);
-%                 MSE = mse(left_gradient, right_corner_1_1);
-%                 error = [error MSE];
-%             end
-%             
-%             minimum = min(error);
-%             min_error = find(error == minimum);
-%             
-%             %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
-%             new_picture = cell2mat(my_array(min_error, 3));
-%             output_image(1:patch_size, patch_size + 1: 2 * patch_size, :) = new_picture;
-%             %figure(1);
-%             %imshow(output_image, []);
-%             my_array(min_error, :) = [];
-% 
-%         
-%         %% inja corner e satr aval sotoon akhar :
-%         elseif i == w - patch_size + 1 && j == 1
-%             error = [];
-%             %% inja right corner barash darmiarim :
-%             %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
-%             for k = 1 : size(my_array)
-%                 element = cell2mat(my_array(k, 1));
-%                 right_gradient = element(:, patch_size);
-%                 MSE = mse(right_gradient, left_corner_1_8);
-%                 error = [error MSE];
-%             end
-%             
-%             minimum = min(error);
-%             min_error = find(error == minimum);
-%             
-%             %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
-%             new_picture = cell2mat(my_array(min_error, 3));
-%             output_image(1:patch_size, w - 2 * patch_size + 1: w - patch_size, :) = new_picture;
-%             figure(1);
-%             imshow(output_image, []);
-%             my_array(min_error, :) = [];
-%             
-%         
-%         %% inja corner e satr akhar sotoon aval :
-%         elseif i == 1 && j == h - patch_size + 1
-%             error = [];
-%             %% inja right corner barash darmiarim :
-%             %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
-%             for k = 1 : size(my_array)
-%                 element = cell2mat(my_array(k, 1));
-%                 left_gradient = element(:,1);
-%                 MSE = mse(left_gradient, right_corner_5_1);
-%                 error = [error MSE];
-%             end
-%             
-%             minimum = min(error);
-%             min_error = find(error == minimum);
-%             
-%             %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
-%             new_picture = cell2mat(my_array(min_error, 3));
-%             output_image(h - patch_size + 1: h, patch_size + 1: 2 * patch_size, :) = new_picture;
-%             figure(1);
-%             imshow(output_image, []);
-%             my_array(min_error, :) = [];
-%             
-%         
-%         %% inja corner e satr akhar sotoon akhar :
-%         elseif i == w - patch_size + 1 && j == h - patch_size + 1
-%             error = [];
-%             %% inja right corner barash darmiarim :
-%             %% hame error haro darmiarim va min e error haro barash dar nazar migirim :
-%             for k = 1 : size(my_array)
-%                 element = cell2mat(my_array(k, 1));
-%                 right_gradient = element(:,patch_size);
-%                 MSE = mse(right_gradient, left_corner_5_8);
-%                 error = [error MSE];
-%             end
-%             
-%             minimum = min(error);
-%             min_error = find(error == minimum);
-%             
-%             
-%             %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
-%             new_picture = cell2mat(my_array(min_error, 3));
-%             output_image(h - patch_size + 1: h, w - (2 * patch_size) + 1 : w - patch_size , :) = new_picture;
-%             figure(1);
-%             imshow(output_image, []);
-%             
-%             my_array(min_error, :) = [];
-% 
-%             
-%             
-%             
-% 
-%              
-%          elseif i == 1 && j ~= h - patch_size + 1 && j ~= 1
-%              error = [];
-%              %% inja block balayii tasvir ro darmiarim
-%              %% baad gradientesh ro hesab mikonim :
-%              
-%              
-%              %temp_picture = output_image(1: patch_size, j - patch_size : j - 1, :);
-%              temp_picture = output_image(j - patch_size : j - 1, 1 : patch_size, :);
-%              %%output_image(j : j + patch_size - 1, 1 : patch_size , :) = new_picture;
-%              
-%              temp_picture = rgb2gray(temp_picture);
-%              [GV ,GD] = imgradient(temp_picture);
-%              bottom = GV(patch_size, :);
-%              
-%              for k = 1 : size(my_array)
-%                  element = cell2mat(my_array(k, 1));
-%                  top = element(1, :);
-%                  MSE = mse(top, bottom);
-%                  error = [error ,MSE];
-%              end
-%              
-%              minimum = min(error);
-%              min_error = find(error == minimum);
-%              
-%              %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
-%              new_picture = cell2mat(my_array(min_error, 3));
-%              output_image(j : j + patch_size - 1, 1 : patch_size , :) = new_picture;
-%              figure(1);
-%              imshow(output_image, []);
-%              my_array(min_error, :) = [];
-%                
-%         end
-%     end
-%     
-% end
-
 figure(1);
 imshow(output_image, []);
 
@@ -243,17 +104,18 @@ for i = 1 : patch_size : h
              %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
              new_picture = cell2mat(my_array(min_error, 3));
              output_image(i : i + patch_size - 1, j : j + patch_size - 1, :) = new_picture;
+             %pause(1);
              figure(1);
              imshow(output_image, []);
-             my_array(min_error, :) = [];
+             %my_array(min_error, :) = [];
              
             %% toye else az samt e chapish estefade mikonim :
             else
                 
                 temp_picture = output_image(i : i + patch_size - 1, j - patch_size : j - 1, :);
                 temp_picture = rgb2gray(temp_picture);
-                %figure;
-                %imshow(temp_picture, []);
+                figure;
+                imshow(temp_picture, []);
                 %% gradient :
                 [GV, GD] = imgradient(temp_picture);
                 right_gradient = GV(:,patch_size);
@@ -273,9 +135,10 @@ for i = 1 : patch_size : h
                  %% hala index ro darim miaim tasvir ro ba indexesh az my_array mikhonim va gharar midim :
                  new_picture = cell2mat(my_array(min_error, 3));
                  output_image(i : i + patch_size - 1, j : j + patch_size - 1, :) = new_picture;
+                 %pause(1);
                  figure(1);
                  imshow(output_image, []);
-                 my_array(min_error, :) = [];
+                 %my_array(min_error, :) = [];
             end
         end
     
