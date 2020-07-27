@@ -216,28 +216,8 @@ for i = 1 : patch_size : h
         %% hala 1 shart pish miad :
         %% age j esh (sotoonesh) sefr bood bayad
         %% az balaiish esfefade kone dar gheir e in soorat
-        %% miad az samt e chapish estefade mikone :
+        %% miad az samt e 
         else
-            
-            %% inja az balaiish migire yani output_image(1 : patch_size, j : j + patch_size_1);
-            %% vaghti az balaiish migirim, pas bottom e temp va top e new_picture ro mikhaim :
-            if(j == 1)
-                temp_picture = output_image(1 : patch_size, j : j + patch_size_1);
-                %% hala inja biaim element e mored e nazar ro dar biarim :
-                
-                for k = 1 : size(my_array);
-                
-                    element = cell2mat(my_array(k, 1));
-                    left_gradient = element(:, 1);
-                    MSE = mse(left_gradient, right_corner_1_1);
-                    error = [error MSE];
-                end
-                
-            %% toye else az samt e chapish estefade mikonim :
-            else
-                temp_picture = output_image(i : i + patch_size - 1, j - patch_size : j - 1);
-                
-            end
             
         end
     
