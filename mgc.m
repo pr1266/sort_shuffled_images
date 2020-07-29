@@ -11,17 +11,15 @@ function D = mgc(imageblocks)
     for o = 1:4
         blk = rot90(imageblocks, o-2);
         GiL = blk(:,end,:,:) - blk(:,end-1,:,:);
-        disp(size(GiL));
+        
         GiL = reshape(GiL, blksize, n, 3);
         %GiL = [GiL; B];
         muiL = mean(GiL);
         
         muiL = reshape(muiL, 3, n);
-        disp(size(muiL));
+        
         invSiL = zeros(3,3,n);
         for k = 1:n
-            disp('N');
-            disp(k);
             
             
             S1 = GiL(:, k,1) - muiL(1,k);
@@ -31,14 +29,12 @@ function D = mgc(imageblocks)
             S = reshape(S, blksize, 3);
             
             SiL = S.' * S;
-            disp(size(S));
-            disp(size(SiL));
+            
             invSiL(:,:,k) = inv(SiL);
         end
         for i = 1:n           
             GijLR = blk(:,1,:,:) - blk(:,end,:,:);
-            disp('size');
-            disp(size(GijLR));
+            
             GijLR = reshape(GijLR,blksize,n,3);
             for j = 1:n
                 
@@ -49,9 +45,7 @@ function D = mgc(imageblocks)
                 temp = reshape(temp, blksize, 3);
                 
                 %temp = GijLR(:,:,j) - muiL(:,:,i);
-                disp('last');
-                disp(size(temp));
-                disp(size(invSiL(:,:,i)));
+                
                 
                 D(i,j,o) = trace( temp * invSiL(:,:,i) * temp.' );
             end
