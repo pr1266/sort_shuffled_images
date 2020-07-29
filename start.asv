@@ -1,0 +1,40 @@
+clear;
+clc;
+close all;
+
+%% read data :
+data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\';
+data_dir = dir(data_path);
+
+%% output image ro mikhoonim ke badan patch haro toosh sort konim :
+output_image = imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Output.tif');
+%% size tasvir :
+h = 1200;
+w = 1920;
+
+%% bar asas e size e tasvir size har patch ro bedast miarim :
+patch_size = sqrt((h * w) / 40);
+%% tedad patch dar har row va col :
+row = h / patch_size;
+col = w / patch_size;
+
+my_array = cell(numel(data_dir) - 9, 4);
+
+%% etelaat ro be array montaghel mikonim :
+
+for image = 9 : numel(data_dir) - 1
+    
+    picture = imread([data_path data_dir(image).name]);
+    my_array(image - 8, 1) = mat2cell(picture, patch_size, patch_size, 3);
+    my_array(image - 8, 2) = cellstr(data_dir(image).name);
+    
+    temp_picture = rgb2gray(picture);
+    [Gmag, Gdir] = imgradient(temp_picture);
+    
+    %% khod e tasvir, esmesh, meghdar gradientesh va direction e gradientesh :
+    my_array(image - 8, 3) = mat2cell(Gmag, patch_size, patch_size);
+    my_array(image - 8, 4) = mat2cell(Gdir, patch_size, patch_size);
+    
+end
+
+[x,y] = meshgrid(1:row,1:col);
