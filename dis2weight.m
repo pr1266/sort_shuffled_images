@@ -15,14 +15,15 @@ vminD(vminD==D) = Dsortcol(2,:,:);
 Dtrans = permute(D,[2 1 3]);
 Dsortrow = sort(Dtrans);
 hminD = repmat(Dsortrow(1,:,:),n,1,1);
+
 disp(size(hminD));
-disp(size(Dsortrow(2, :, :)));
- 
-%hminD(hminD==Dtrans) = Dsortrow(2,:,:);
+disp(Dsortrow(2, :, :));
+
+hminD(hminD == Dtrans) = Dsortrow(2,:,:);
 
 hminD = permute(hminD,[2 1 3]);
 
 w = min(vminD,hminD) ./ D;
-
+disp(w);
 end
 

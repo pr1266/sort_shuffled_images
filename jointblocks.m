@@ -22,13 +22,10 @@ for k = 1:n
     jointimage(rangerow,rangecol,:) = imageblocks(:,:,:,k);
 end
 
-if nargin < 4
-    figure;
-end
 imshow(jointimage);
 set(gcf,'color','w');
 
 x = x + 1;
 y = y + 1;
-disp('tamam');
+
 end
