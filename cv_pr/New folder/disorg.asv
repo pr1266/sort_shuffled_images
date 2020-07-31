@@ -15,7 +15,7 @@ function [imageBlocks,rows,cols] = disorg(image,blockSize)
 	patch_per_col = floor(width / blockSize);
 	number_of_parts = patch_per_row * patch_per_col;
 
-	image = image(1 : patch_per_row * blockSize, 1 : patch_per_col * blockSize, : );
+	image = image(1:patch_per_row * blockSize , 1 : patch_per_col * blockSize, : );
 
 	rgbPartsArray = zeros([blockSize,blockSize,3,number_of_parts],class(image));
 
