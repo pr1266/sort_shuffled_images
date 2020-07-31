@@ -3,7 +3,7 @@ close all;
 %% read data :
 data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\';
 data_dir = dir(data_path);
-
+block_count = str2num(data_path(size(data_path) - 3: size(data_path) - 2));
 %% output image ro mikhoonim ke badan patch haro toosh sort konim :
 output_image = imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Output.tif');
 %% size tasvir :
@@ -11,7 +11,7 @@ h = 1200;
 w = 1920;
 
 %% bar asas e size e tasvir size har patch ro bedast miarim :
-patch_size = sqrt((h * w) / 40);
+patch_size = sqrt((h * w) / block_count);
 
 %% horizontal sobel filter
 sobel_filter = [-1, -2, -1; 0, 0, 0; 1, 2, 1];
@@ -180,7 +180,6 @@ for i = 1 : patch_size : h
                 %my_array(index, :) = [];
             end
         end
-    
     end
  end
 

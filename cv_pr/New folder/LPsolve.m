@@ -1,63 +1,50 @@
 function [jointimage,x,y,D] = LPsolve(imageblocks,M,N,iternum,D)
 
-	% Use 'cvx_version' to return environment information
-	CVX_VERSION = 3.0;
-	% CVX_VERSION = 2.1;
+n = M * N;
+D = MGC_compute_cvx3(imageblocks);
+		
+w = dis2weight(D);
 
-	n = M * N;
+delta_x = [0; -1; 0; 1];
+delta_y = [1; 0; -1; 0];
 
-	if nargin < 5
-		if CVX_VERSION >= 3
-			% For cvx version 3.0 beta or higher (recommended)
-			D = MGC_compute_cvx3(imageblocks);
-		else
-			% For cvx version 2.1 or higher
-			D = MGC_compute_cvx2(imageblocks);
-		end
-	end
+U = true(n,n,4);
 
-	w = dis2weight(D);
+for ii = 1:iternum
 
-	delta_x = [0; -1; 0; 1];
-	delta_y = [1; 0; -1; 0];
+    [~,indj] = min(D.*U,[],2);
+    i = repmat((1:n)',4,1);
+    j = indj(:);
+    o = reshape(repmat(1:4,n,1),[],1);
+    indA = sub2ind([n,n,4],i,j,o);
 
-	U = true(n,n,4);
+    cvx_begin
+        variables x(n) hx(4*n);
+        minimize ( w(indA).' * hx );
+        subject to
+            -hx <= x(i) - x(j) - delta_x(o) <= hx; %#ok
+            1 <= x <= N; %#ok
+    cvx_end
 
-	for ii = 1:iternum
+    cvx_begin
+        variables y(n) hy(4*n);
+        minimize ( w(indA).' * hy );
+        subject to
+            -hy <= y(i) - y(j) - delta_y(o) <= hy; %#ok
+            1 <= y <= M;%#ok
+    cvx_end
 
-		[~,indj] = min(D.*U,[],2);
-		i = repmat((1:n)',4,1);
-		j = indj(:);
-		o = reshape(repmat(1:4,n,1),[],1);
-		indA = sub2ind([n,n,4],i,j,o);
+    subA = [i, j, o];
+    subR = subA(max(hx,hy)>1e-5,:);
+    indR = sub2ind([n,n,4],subR);
+    U(indR) = false;
 
-		cvx_begin
-			variables x(n) hx(4*n);
-			minimize ( w(indA).' * hx );
-			subject to
-				-hx <= x(i) - x(j) - delta_x(o) <= hx; %#ok
-				1 <= x <= N; %#ok
-		cvx_end
-
-		cvx_begin
-			variables y(n) hy(4*n);
-			minimize ( w(indA).' * hy );
-			subject to
-				-hy <= y(i) - y(j) - delta_y(o) <= hy; %#ok
-				1 <= y <= M;%#ok
-		cvx_end
-
-		subA = [i, j, o];
-		subR = subA(max(hx,hy)>1e-5,:);
-		indR = sub2ind([n,n,4],subR);
-		U(indR) = false;
-
-		jointimage = jointblocks(imageblocks,x,y);
-		title('Restored Image - LP Method');
-		drawnow;
-
-		fprintf(['CVX-Jigsaw image: ' num2str(size(jointimage,1)) ' x '...
-			num2str(size(jointimage,2)) ' pixels\n']);
+    jointimage = jointblocks(1,imageblocks,x,y);
+    title('Restored Image - LP Method');
+    drawnow;
+% 
+%     fprintf(['CVX-Jigsaw image: ' num2str(size(jointimage,1)) ' x '...
+%         num2str(size(jointimage,2)) ' pixels\n']);
 
 	end
 
