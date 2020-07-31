@@ -3,7 +3,7 @@ clear;
 close all;
 %image = imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_160\Original.tif');
 
-data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_160\';
+data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\';
 data_dir = dir(data_path);
 
 %% output image ro mikhoonim ke badan patch haro toosh sort konim :
@@ -20,30 +20,11 @@ patch_size = sqrt((h * w) / pieces);
 
 %% horizontal sobel filter
 sobel_filter = [-1, -2, -1; 0, 0, 0; 1, 2, 1];
+
 %% ye array dorost mikonim ta etelaat e patch haro zakhire konim :
-my_array = cell(numel(data_dir) - 9, 5);
+my_array = feature_extraction(data_dir, data_path, patch_size);
 
-%% etelaat ro be array montaghel mikonim :
 
-for image = 9 : numel(data_dir) - 1
-    
-    picture = imread([data_path data_dir(image).name]);
-    temp_picture = rgb2gray(picture);
-    [Gmag, Gdir] = imgradient(temp_picture);
-    
-    %% khod e tasvir, esmesh, meghdar gradientesh va direction e gradientesh :
-    my_array(image - 8, 1) = mat2cell(Gmag, patch_size, patch_size);
-    my_array(image - 8, 2) = mat2cell(Gdir, patch_size, patch_size);
-    my_array(image - 8, 3) = mat2cell(picture, patch_size, patch_size, 3);
-    my_array(image - 8, 4) = cellstr(data_dir(image).name);
-    
-    filtered_picture = imfilter(picture, sobel_filter);
-    my_array(image - 8, 5) = mat2cell(filtered_picture, patch_size, patch_size, 3);
-    
-    %figure;
-    %imshow(filtered_picture, []);
-    
-end
 
 for i = 1 : patch_size : h
     for j = 1 : patch_size : w
