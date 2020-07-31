@@ -9,9 +9,6 @@ function [jointimage,x,y] = jointblocks(boolean_,imageblocks,x,y,~)
 	y = round(y);
     
 	jointimage = zeros((max(y)+1)*blocksize, (max(x)+1)*blocksize, 3);
-    %jointimage = zeros(1200,1920,3);
-    %disp(size(jointimage));
-    %jointimage = BG;
 	for k = 1:n
 		rangecol = blocksize*x(k)+1 : blocksize*(x(k)+1);
 		rangerow = blocksize*y(k)+1 : blocksize*(y(k)+1);

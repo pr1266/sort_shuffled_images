@@ -40,12 +40,11 @@ for ii = 1:iternum
     U(indR) = false;
 
     jointimage = jointblocks(1,imageblocks,x,y);
-    title('Restored Image - LP Method');
-    drawnow;
-% 
-%     fprintf(['CVX-Jigsaw image: ' num2str(size(jointimage,1)) ' x '...
-%         num2str(size(jointimage,2)) ' pixels\n']);
-
+    figure(11);
+    imshow(jointimage,[]);
+    title('restored');
+    
+    
 	end
 
 end
