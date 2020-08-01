@@ -1,11 +1,11 @@
 clear;
 close all;
 %% read data :
-data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\';
+data_path = 'C:\Users\pr1266\Desktop\cv_project\Puzzle_2_160\';
 data_dir = dir(data_path);
 block_count = str2num(data_path(size(data_path) - 3: size(data_path) - 2));
 %% output image ro mikhoonim ke badan patch haro toosh sort konim :
-output_image = imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_40\Output.tif');
+output_image = imread('C:\Users\pr1266\Desktop\cv_project\Puzzle_2_160\Output.tif');
 %% size tasvir :
 h = 1200;
 w = 1920;

@@ -16,12 +16,9 @@ for image = 9 : numel(data_dir) - 1
     my_array(image - 8, 2) = mat2cell(Gdir, patch_size, patch_size);
     my_array(image - 8, 3) = mat2cell(picture, patch_size, patch_size, 3);
     my_array(image - 8, 4) = cellstr(data_dir(image).name);
-    
+    %% inja ham ye filter e sobel mizanim baraye edge detection :
     filtered_picture = imfilter(picture, sobel_filter);
     my_array(image - 8, 5) = mat2cell(filtered_picture, patch_size, patch_size, 3);
-    
-    %figure;
-    %imshow(filtered_picture, []);
     
 end
 end

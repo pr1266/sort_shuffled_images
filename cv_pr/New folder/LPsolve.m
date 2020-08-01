@@ -1,10 +1,20 @@
 function [jointimage,x,y,D] = LPsolve(imageblocks,M,N,iternum,D)
 
+%% dar in function ba estefade az Linear Programming
+%% solution e masale ro peyda mikonim :
+%% inja tedad e patch ha ro be dast miarim :
 n = M * N;
-D = MGC_compute_cvx3(imageblocks);
-		
-w = dis2weight(D);
 
+%% inja matrix D ke dar vaghe havi Mahalanobis Gradient Compatibility
+%% ya hamoon (MGC) hast :
+[w D] = mgc(imageblocks);
+
+%% dar in function bar asas e D, meghdar e vazn haro be dast miarim :
+%%w = dis2weight(D);
+
+%% meghdar e delta ha ro tarif mikonim
+%% ke dar vaghe Xi - Xj
+%% va Yi - Yj ro dar 4 orientation mokhtalef neshoon mide :
 delta_x = [0; -1; 0; 1];
 delta_y = [1; 0; -1; 0];
 
@@ -17,33 +27,31 @@ for ii = 1:iternum
     j = indj(:);
     o = reshape(repmat(1:4,n,1),[],1);
     indA = sub2ind([n,n,4],i,j,o);
-
+    
+    %% inja az linear programming estefade mikonim
+    %% dar vaghe mikhaim ke meghdar e 
     cvx_begin
-        variables x(n) hx(4*n);
-        minimize ( w(indA).' * hx );
+        variables x(n) cx(4*n);
+        minimize ( w(indA).' * cx );
         subject to
-            -hx <= x(i) - x(j) - delta_x(o) <= hx; %#ok
-            1 <= x <= N; %#ok
+            -cx <= x(i) - x(j) - delta_x(o) <= cx; %#ok
+            1 <= x <= N;
     cvx_end
 
     cvx_begin
-        variables y(n) hy(4*n);
-        minimize ( w(indA).' * hy );
+        variables y(n) cy(4*n);
+        minimize ( w(indA).' * cy );
         subject to
-            -hy <= y(i) - y(j) - delta_y(o) <= hy; %#ok
-            1 <= y <= M;%#ok
+            -cy <= y(i) - y(j) - delta_y(o) <= cy; %#ok
+            1 <= y <= M;
     cvx_end
 
     subA = [i, j, o];
-    subR = subA(max(hx,hy)>1e-5,:);
+    subR = subA(max(cx,cy)>1e-5,:);
     indR = sub2ind([n,n,4],subR);
     U(indR) = false;
 
     jointimage = jointblocks(1,imageblocks,x,y);
-    figure(11);
-    imshow(jointimage,[]);
-    title('restored');
-    
     
 	end
 

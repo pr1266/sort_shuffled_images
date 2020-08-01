@@ -1,5 +1,4 @@
 function [jointimage,x,y] = jointblocks(boolean_,imageblocks,x,y,~)
-%function [jointimage,x,y] = jointblocks(imageblocks, BG,x,y,~)
 	blocksize = size(imageblocks,1);
 	n = size(imageblocks,4);
 
@@ -8,21 +7,24 @@ function [jointimage,x,y] = jointblocks(boolean_,imageblocks,x,y,~)
 	y = y - min(y(:));
 	y = round(y);
     
-	jointimage = zeros((max(y)+1)*blocksize, (max(x)+1)*blocksize, 3);
+    
+    
+	jointimage = zeros((max(y)+1) * blocksize, (max(x)+1) * blocksize, 3);
 	for k = 1:n
 		rangecol = blocksize*x(k)+1 : blocksize*(x(k)+1);
 		rangerow = blocksize*y(k)+1 : blocksize*(y(k)+1);
+        
 		jointimage(rangerow,rangecol,:) = imageblocks(:,:,:,k);
         if boolean_
-            pause(0.05);
+            
             figure(1);
             imshow(jointimage);
         end
     end
-    figure;
+    figure(2);
 	imshow(jointimage);
 	set(gcf,'color','w');
-
+    title('end')
 	x = x + 1;
 	y = y + 1;
 
