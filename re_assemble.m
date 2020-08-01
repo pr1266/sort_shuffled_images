@@ -1,4 +1,4 @@
-function [final_image,x,y] = jointblocks(boolean_,imageblocks,x,y,~)
+function [final_image,x,y] = re_assemble(boolean_,imageblocks,x,y,~)
     
     %% size har patch ro dar miarim :
 	patch_size = size(imageblocks,1);

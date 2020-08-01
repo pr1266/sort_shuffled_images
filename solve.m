@@ -1,14 +1,21 @@
-function [jointimage,x,y,D] = LPsolve(imageblocks,M,N,iternum,D)
+function [jointimage,x,y,D] = solve(imageblocks,M,N,iternum,D)
 
 %{
----------------------------------------------
+
+x va y intori hastand :
+dar vaghe ma ba x , y va dastor meshgrid
+miaim aks ro be tedad e del khah partition
+bandi mikonim va dar akhar e behine sazi,
+index e marboot be har block moshakhas mishe
 
 ---------------------------------------------
-
+  1 |  2 |  3 |  4 |  5 | 6  |  7 | 8
 ---------------------------------------------
-
+  . |  . |  . |  . |  . | .  |  . | .
 ---------------------------------------------
-    
+    |    |    |    |    |    |    |
+---------------------------------------------
+    |    |    |    |    |    |    |    
 ---------------------------------------------
     |    |    |    |    |    |    |
 ---------------------------------------------
@@ -23,9 +30,6 @@ n = M * N;
 %% ya hamoon (MGC) hast :
 [w D] = mgc(imageblocks);
 
-%% dar in function bar asas e D, meghdar e vazn haro be dast miarim :
-%%w = dis2weight(D);
-
 %% meghdar e delta ha ro tarif mikonim
 %% ke dar vaghe Xi - Xj
 %% va Yi - Yj ro dar 4 orientation mokhtalef neshoon mide :
@@ -34,7 +38,7 @@ delta_y = [1; 0; -1; 0];
 
 U = true(n,n,4);
 
-for ii = 1:iternum
+for iter_index = 1:iternum
 
     [~,indj] = min(D.*U,[],2);
     i = repmat((1:n)',4,1);
@@ -65,7 +69,7 @@ for ii = 1:iternum
     indR = sub2ind([n,n,4],subR);
     U(indR) = false;
 
-    jointimage = jointblocks(1,imageblocks,x,y);
+    jointimage = re_assemble(1,imageblocks,x,y);
     
 	end
 

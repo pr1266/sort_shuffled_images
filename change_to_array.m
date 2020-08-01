@@ -1,4 +1,4 @@
-function [imageBlocks,patch_per_row,patch_per_col] = disorg(image,blockSize)
+function [imageBlocks,patch_per_row,patch_per_col] = change_to_array(image,blockSize)
     
     %% toye in function mikhaim ke tasvir ro be ye sers ghataat 
     %% tafkik konim va dar yek array berszim :

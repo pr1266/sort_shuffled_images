@@ -1,4 +1,4 @@
-function [jointimage,x,y,D] = LPsolve(imageblocks,M,N,iternum,D)
+function [jointimage,x,y,D] = solve(imageblocks,M,N,iternum,D)
 
 %{
 
