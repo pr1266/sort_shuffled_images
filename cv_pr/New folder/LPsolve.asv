@@ -1,21 +1,14 @@
 function [jointimage,x,y,D] = LPsolve(imageblocks,M,N,iternum,D)
 
 %{
-
-x va y intori hastand :
-dar vaghe ma ba x , y va dastor meshgrid
-miaim aks ro be tedad e del khah partition
-bandi mikonim va dar akhar e behine sazi,
-index e marboot be har block moshakhas mishe
+---------------------------------------------
 
 ---------------------------------------------
-  1 |  2 |  3 |  4 |  5 | 6  |  7 | 8
+
 ---------------------------------------------
-  . |  . |  . |  . |  . | .  |  . | .
+
 ---------------------------------------------
-    |    |    |    |    |    |    |
----------------------------------------------
-    |    |    |    |    |    |    |    
+    
 ---------------------------------------------
     |    |    |    |    |    |    |
 ---------------------------------------------

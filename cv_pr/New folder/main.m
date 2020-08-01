@@ -18,8 +18,8 @@ h = 1200;
 w = 1920;
 
 %% tedad e block haye puzzle (patch_size) :
-%pieces = str2num(data_path(size(data_path,2) - 2: size(data_path,2) - 1));
-pieces = 160;
+pieces = numel(data_dir) - 5;
+%pieces = 160;
 %% bar asas e size e tasvir size har patch ro bedast miarim :
 patch_size = sqrt((h * w) / pieces);
 

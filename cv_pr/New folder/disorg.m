@@ -1,11 +1,12 @@
 function [imageBlocks,patch_per_row,patch_per_col] = disorg(image,blockSize)
     
-    %% toye in function mikhaim ke tasvir ro be ye seri ghataat 
-    %% tafkik konim va dar yek array berizim :
+    %% toye in function mikhaim ke tasvir ro be ye sers ghataat 
+    %% tafkik konim va dar yek array berszim :
 	
-    %% inja size e tasvir ro dar miarim :
+    %% inja size e tasvir ro dar miarsm :
     size_of_image = size(image);
-   
+
+    %% height va width :
     height = size_of_image(1);
     width = size_of_image(2);
     
@@ -23,13 +24,15 @@ function [imageBlocks,patch_per_row,patch_per_col] = disorg(image,blockSize)
 	rgbPartsArray = zeros([blockSize,blockSize,3,number_of_parts],class(image));
 
     %% dar inja ghesmat ghesmat mikonim :
-    
+    %% har ghesmat ro to ye khoone az array zakhire mikonim
 	for i = 1 : number_of_parts
-		rowStartIndex = (ceil(i/patch_per_col)-1) * blockSize + 1;
-        rowEndIndex = rowStartIndex + (blockSize-1);
-        colStartIndex = mod(i-1, patch_per_col)  * blockSize + 1;
-        colEndIndex = colStartIndex + (blockSize-1);
-        rgbPartsArray(:,:,:,i) = image(rowStartIndex:rowEndIndex,colStartIndex:colEndIndex,:);
+        
+		rs = (ceil(i/patch_per_col) - 1) * blockSize + 1;
+        re = rs + (blockSize - 1);
+        cs = mod(i-1 , patch_per_col)  * blockSize + 1;
+        ce = cs + (blockSize - 1);
+        rgbPartsArray(:,:,:,i) = image(rs:re,cs:ce,:);
+    
     end
     
     %% inja ye shuffle mizanim rooye array e tasviremoon :
